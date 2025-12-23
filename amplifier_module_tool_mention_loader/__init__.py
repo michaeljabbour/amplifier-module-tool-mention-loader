@@ -95,16 +95,19 @@ class MentionLoaderTool:
             "required": ["mentions"]
         }
 
-    async def execute(self, mentions: List[str]) -> ToolResult:
+    async def execute(self, input: dict[str, Any]) -> ToolResult:
         """
         Load content for @mentioned files/directories.
 
         Args:
-            mentions: List of @mentioned paths
+            input: Tool input dict containing 'mentions' key
 
         Returns:
             ToolResult with loaded content and metadata
         """
+        # Extract mentions from input
+        mentions = input.get("mentions", [])
+
         # Determine base path
         base_path = self._get_base_path()
 
