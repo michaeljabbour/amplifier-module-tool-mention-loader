@@ -10,6 +10,8 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from amplifier_core import ToolResult
+
 __version__ = "1.0.0"
 __amplifier_module_type__ = "tool"
 
@@ -93,7 +95,7 @@ class MentionLoaderTool:
             "required": ["mentions"]
         }
 
-    async def execute(self, mentions: List[str]) -> Dict[str, Any]:
+    async def execute(self, mentions: List[str]) -> ToolResult:
         """
         Load content for @mentioned files/directories.
 
@@ -101,7 +103,7 @@ class MentionLoaderTool:
             mentions: List of @mentioned paths
 
         Returns:
-            Dict with loaded content and metadata
+            ToolResult with loaded content and metadata
         """
         # Determine base path
         base_path = self._get_base_path()
@@ -142,7 +144,7 @@ class MentionLoaderTool:
         if self.show_loaded_files and loaded_files:
             result["message"] = f"Loaded {len(loaded_files)} file(s): {', '.join(loaded_files)}"
 
-        return result
+        return ToolResult(success=True, output=result)
 
     def _get_base_path(self) -> Path:
         """
