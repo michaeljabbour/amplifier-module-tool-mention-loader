@@ -110,8 +110,12 @@ class MentionLoaderTool:
         content_parts = []
 
         for mention in mentions:
-            # Remove @ prefix if present
-            path_str = mention.lstrip("@")
+            # Remove @ prefix if present and strip whitespace
+            path_str = mention.lstrip("@").strip()
+
+            # Skip empty or whitespace-only mentions
+            if not path_str:
+                continue
 
             # Resolve the path
             resolved_path = self._resolve_path(base_path, path_str)
@@ -120,7 +124,7 @@ class MentionLoaderTool:
                 if resolved_path.is_file():
                     # Load file content
                     file_content = self._load_file(resolved_path)
-                    if file_content:
+                    if file_content is not None:
                         loaded_files.append(str(resolved_path))
                         content_parts.append(f"# {resolved_path}\n\n{file_content}")
                 elif resolved_path.is_dir():
